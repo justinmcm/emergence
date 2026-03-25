@@ -16,6 +16,18 @@ The result is an interpretability tool that lets you **watch a model think** —
 
 ---
 
+## Screenshots
+
+![Explore mode](images/Screenshot%202026-03-26%20035336.png)
+![Safety comparison](images/Screenshot%202026-03-26%20035359.png)
+![Divergence firing](images/Screenshot%202026-03-26%20035412.png)
+![Layer sweep](images/Screenshot%202026-03-26%20035425.png)
+![Results viewer](images/Screenshot%202026-03-26%20035437.png)
+![Results chart](images/Screenshot%202026-03-26%20035805.png)
+
+---
+
+
 ## The Safety Experiment
 
 We ran 500 matched sentence pairs (safe vs unsafe) across 10 harm categories through Phi-3 Mini 4k Instruct and measured **hidden state divergence at every layer**.
