@@ -91,24 +91,20 @@ input[type=text]:focus{border-color:rgba(127,119,221,0.5);}
 .pill:hover{background:rgba(127,119,221,0.18);}
 .pill.on{border-color:#7F77DD;background:rgba(127,119,221,0.18);}
 
-#diverge-panel{
-  position:fixed;right:16px;top:50%;transform:translateY(-50%);
-  width:260px;background:rgba(6,10,20,0.93);
-  border:1px solid rgba(255,255,255,0.08);border-radius:10px;
-  padding:14px;z-index:20;display:none;
+#diverge-bar{
+  display:none;gap:14px;align-items:center;
+  padding:6px 0 0;border-top:1px solid rgba(255,255,255,0.05);margin-top:6px;
 }
-.dp-title{font-size:12px;font-weight:500;color:#e8eaf0;margin-bottom:10px;}
-.dp-stat{display:flex;justify-content:space-between;padding:3px 0;font-size:11px;}
-.dp-label{color:#6b7280;}
-.dp-val{font-weight:500;}
-.dp-alarm{color:#E24B4A;}
-.dp-safe{color:#1D9E75;}
-.dp-chart{margin-top:10px;position:relative;height:100px;}
-.dp-drivers{margin-top:10px;}
-.dp-driver{display:flex;justify-content:space-between;padding:2px 0;font-size:11px;
-  border-bottom:1px solid rgba(255,255,255,0.04);}
-.dp-driver-tok{color:#9ca3af;}
-.dp-driver-div{color:#F09595;}
+.db-stats{display:flex;gap:16px;align-items:center;white-space:nowrap;}
+.db-stat{display:flex;flex-direction:column;align-items:center;}
+.db-lbl{font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;}
+.db-val{font-size:12px;font-weight:500;color:#e8eaf0;}
+.db-alarm{color:#E24B4A;}
+.db-safe{color:#1D9E75;}
+.db-chart-wrap{flex:1;position:relative;height:36px;}
+.db-drivers{display:flex;gap:8px;align-items:center;font-size:10px;color:#6b7280;white-space:nowrap;}
+.db-driver-tok{color:#9ca3af;}
+.db-driver-div{color:#F09595;margin-left:2px;}
 
 #status{
   position:fixed;left:50%;transform:translateX(-50%);
@@ -214,34 +210,34 @@ input[type=text]:focus{border-color:rgba(127,119,221,0.5);}
     <input type="range" id="lslider" min="0" max="47" value="0" step="1" oninput="setLayer(+this.value)">
     <span id="linfo">0 / 47</span>
   </div>
+  <div id="diverge-bar" style="display:none;gap:14px;align-items:center;padding:6px 0 2px;border-top:1px solid rgba(255,255,255,0.05);margin-top:4px;">
+    <div style="display:flex;gap:16px;align-items:center;white-space:nowrap;">
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <span style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;">Alarm</span>
+        <span style="font-size:12px;font-weight:500;color:#E24B4A;" id="dp-alarm">—</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <span style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;">Now</span>
+        <span style="font-size:12px;font-weight:500;color:#e8eaf0;" id="dp-current">—</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <span style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;">Peak</span>
+        <span style="font-size:12px;font-weight:500;color:#e8eaf0;" id="dp-max">—</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <span style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;">Pattern</span>
+        <span style="font-size:11px;font-weight:500;color:#9ca3af;" id="dp-pattern">—</span>
+      </div>
+    </div>
+    <div style="flex:1;position:relative;height:36px;">
+      <canvas id="diverge-chart"></canvas>
+    </div>
+    <div id="dp-drivers-section" style="display:none;flex-direction:row;gap:6px;align-items:center;font-size:10px;color:#6b7280;">
+      <span style="font-size:9px;text-transform:uppercase;letter-spacing:.04em;">Drivers:</span>
+      <div id="dp-drivers" style="display:flex;gap:8px;"></div>
+    </div>
+  </div>
   <div id="pills"></div>
-</div>
-
-<div id="diverge-panel">
-  <div class="dp-title">Divergence analysis</div>
-  <div class="dp-stat">
-    <span class="dp-label">Alarm layer</span>
-    <span class="dp-val dp-alarm" id="dp-alarm">—</span>
-  </div>
-  <div class="dp-stat">
-    <span class="dp-label">Current divergence</span>
-    <span class="dp-val" id="dp-current">—</span>
-  </div>
-  <div class="dp-stat">
-    <span class="dp-label">Max divergence</span>
-    <span class="dp-val" id="dp-max">—</span>
-  </div>
-  <div class="dp-stat">
-    <span class="dp-label">Pattern</span>
-    <span class="dp-val" id="dp-pattern">—</span>
-  </div>
-  <div class="dp-chart">
-    <canvas id="diverge-chart"></canvas>
-  </div>
-  <div class="dp-drivers" id="dp-drivers-section" style="display:none">
-    <div style="font-size:10px;color:#6b7280;margin:8px 0 4px;text-transform:uppercase;letter-spacing:.04em;">Top diverging tokens</div>
-    <div id="dp-drivers"></div>
-  </div>
 </div>
 
 <div id="status">Type a sentence and click Analyze</div>
@@ -283,14 +279,14 @@ function setMode(m){
 
   if(m==='safety'){
     enableSplit();
-    document.getElementById('diverge-panel').style.display=safetyData?'block':'none';
+    document.getElementById('diverge-bar').style.display=safetyData?'flex':'none';
     document.getElementById('label-safe').style.display='block';
     document.getElementById('label-unsafe').style.display='block';
     document.getElementById('legend').style.display='none';
     document.getElementById('pills').innerHTML='';
   } else {
     if(splitMode) disableSplit();
-    document.getElementById('diverge-panel').style.display='none';
+    document.getElementById('diverge-bar').style.display='none';
     document.getElementById('label-safe').style.display='none';
     document.getElementById('label-unsafe').style.display='none';
     document.getElementById('legend').style.display='block';
@@ -585,7 +581,7 @@ async function analyzeSafety(){
       document.getElementById('alarm-text').style.color='#1D9E75';
     }
 
-    document.getElementById('diverge-panel').style.display='block';
+    document.getElementById('diverge-bar').style.display='flex';
     buildDivergeChart();
     updateDivergePanel(0);
 
@@ -649,12 +645,9 @@ function updateDivergePanel(li){
 
   // Token drivers
   if(safetyData.token_drivers&&safetyData.token_drivers.length){
-    document.getElementById('dp-drivers-section').style.display='block';
+    document.getElementById('dp-drivers-section').style.display='flex';
     const html=safetyData.token_drivers.slice(0,3).map(d=>
-      `<div class="dp-driver">
-        <span class="dp-driver-tok">"${d.safe_token}" / "${d.unsafe_token}"</span>
-        <span class="dp-driver-div">${d.divergence.toFixed(4)}</span>
-      </div>`
+      `<span style="background:rgba(226,75,74,0.12);border:1px solid rgba(226,75,74,0.2);border-radius:6px;padding:1px 6px;font-size:10px;color:#F09595;">"${d.unsafe_token}" <span style="color:#6b7280">${d.divergence.toFixed(3)}</span></span>`
     ).join('');
     document.getElementById('dp-drivers').innerHTML=html;
   }
