@@ -1,4 +1,4 @@
-# Emergence — AI Safety Interpretability Viewer
+# interpretability-viewer — AI Safety Interpretability Viewer
 
 A 3D physics-based tool for visualizing neural network internals and measuring safety processing in language models.
 
@@ -10,7 +10,7 @@ A 3D physics-based tool for visualizing neural network internals and measuring s
 
 ## What this is
 
-Emergence renders a running language model as a **living 3D physics simulation**. Each token becomes a particle. Attention weights become gravitational forces. Tokens that attend to each other pull together. Tokens that ignore each other drift apart.
+interpretability-viewer renders a running language model as a **living 3D physics simulation**. Each token becomes a particle. Attention weights become gravitational forces. Tokens that attend to each other pull together. Tokens that ignore each other drift apart.
 
 The result is an interpretability tool that lets you **watch a model think** — and measure where safety processing happens inside the network.
 
@@ -54,8 +54,8 @@ The core question: when a safety-trained model internally distinguishes between 
 ### Install
 
 ```bash
-git clone https://github.com/justinmcm/emergence
-cd emergence
+git clone https://github.com/justinmcm/interpretability-viewer
+cd interpretability-viewer
 pip install -r requirements.txt
 ```
 
@@ -96,7 +96,7 @@ Estimated runtime: 4-6 hours on an RTX 3050.
 ## Project structure
 
 ```
-emergence/
+interpretability-viewer/
 ├── server.py              — Flask server, model loading, attention extraction
 ├── pairs.py               — 500 sentence pairs across 10 harm categories
 ├── run_experiment.py      — Bulk experiment runner
